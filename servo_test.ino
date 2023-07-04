@@ -2,41 +2,50 @@
 
 // Arduino入門編⑦ ジョイスティックからの入力値を読み取る
 // https://burariweb.info
-Servo servo;
+Servo servoA;
+Servo servoB;
 
 const int xPin = A0; // X軸方向の入力をアナログピンA0に
-// const int yPin = A1;  // Y軸方向の入力をアナログピンA1に
-// const int switchPin = 2;  // センタースイッチの入力をデジタルピンD2に
+const int switchPinInA = 2;  // センタースイッチの入力をデジタルピンD2に
+const int switchPinInB = 3;  // センタースイッチの入力をデジタルピンD2に
+const int LEDPin = 13;  // センタースイッチの入力をデジタルピンD2に
 
 int xPosition; // X軸方向の読み取り値の変数を整数型に
-// int yPosition ;   // Y軸方向の読み取り値の変数を整数型に
-// int switchPosition ;  // センタースイッチの読み取り値の変数を整数型に
 
 void setup() {
   pinMode(xPin, INPUT); // A0ピンを入力に(省略可)
-  // pinMode(YPin, INPUT);          // A1ピンを入力に(省略可)
-  // pinMode(switchPosition, INPUT_PULLUP);  // D2ピンをプルアップして入力に
-  // pinMode(5,INPUT_PULLUP);
-  pinMode(13, OUTPUT);
+  pinMode(switchPinInA, INPUT_PULLUP);
+  pinMode(switchPinInB, INPUT_PULLUP);
 
-  servo.attach(11);
-  // シリアル通信の開始
-  Serial.begin(9600);
+  pinMode(LEDPin, OUTPUT);
+
+  servoA.attach(10);
+  servoB.attach(9);
 }
 
 void loop() {
-  xPosition = analogRead(xPin) / 5.7; // X軸方向のアナログ値を読み取る
-  // yPosition = analogRead(Y_PIN);     // Y軸方向のアナログ値を読み取る
-  // swPosition = digitalRead(SW_PIN);  // センタースイッチの状態を読み取る
-  servo.write(xPosition);
-  /*
-  Serial.print("X: ");           // シリアルモニタにそれぞれの値を出力
-  Serial.println(xPosition);
-  Serial.print("  Y: ");
-  Serial.print(yPosition);
-  Serial.print("  SW: ");
-  Serial.println(switchPosition);
-  */
-
+  xPosition = analogRead(xPin) / (1023/180);
+  servoA.write(xPosition);
+  
+  bool swStateA=digitalRead(switchPinInA);
+  bool swStateB=digitalRead(switchPinInB);
+  if(swStateA==0){
+    digitalWrite(LEDPin,HIGH);
+    //servoB.write(0);
+  }
+  else{
+    digitalWrite(LEDPin,LOW);
+    //servoB.write(90);
+  }
+  
+  if(swStateB==0){
+    //digitalWrite(LEDPin,HIGH);
+    servoB.write(180);
+  } 
+  else{
+    //digitalWrite(LEDPin,LOW);
+    servoB.write(90);
+  }
+  
   delay(100);
 }
