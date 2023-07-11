@@ -1,51 +1,53 @@
 #include <Servo.h>
 
-// Arduino入門編⑦ ジョイスティックからの入力値を読み取る
-// https://burariweb.info
 Servo servoA;
 Servo servoB;
+Servo servoC;
 
-const int xPin = A0; // X軸方向の入力をアナログピンA0に
-const int switchPinInA = 2;  // センタースイッチの入力をデジタルピンD2に
-const int switchPinInB = 3;  // センタースイッチの入力をデジタルピンD2に
-const int LEDPin = 13;  // センタースイッチの入力をデジタルピンD2に
+const int joyStickPinA = A1;
+const int joyStickPinB = A2;
 
-int xPosition; // X軸方向の読み取り値の変数を整数型に
+const int switchPinA = 2;
+const int switchPinB = 3;
+
+const int servoPinA = 11;
+const int servoPinB = 12;
+const int servoPinC= 13;
+
+int joyStickPositionA;
+int joyStickPositionB;
+
 
 void setup() {
-  pinMode(xPin, INPUT); // A0ピンを入力に(省略可)
+  pinMode(joyStickPinA, INPUT);
+  pinMode(joyStickPinB, INPUT);
+
   pinMode(switchPinInA, INPUT_PULLUP);
   pinMode(switchPinInB, INPUT_PULLUP);
 
-  pinMode(LEDPin, OUTPUT);
-
-  servoA.attach(10);
-  servoB.attach(9);
+  servoA.attach(servoPinA);
+  servoB.attach(servoPinB);
+  servoC.attach(servoPinC);
 }
 
 void loop() {
-  xPosition = analogRead(xPin) / (1023/180);
-  servoA.write(xPosition);
-  
-  bool swStateA=digitalRead(switchPinInA);
-  bool swStateB=digitalRead(switchPinInB);
-  if(swStateA==0){
-    digitalWrite(LEDPin,HIGH);
-    //servoB.write(0);
-  }
-  else{
-    digitalWrite(LEDPin,LOW);
-    //servoB.write(90);
-  }
-  
-  if(swStateB==0){
-    //digitalWrite(LEDPin,HIGH);
-    servoB.write(180);
-  } 
-  else{
-    //digitalWrite(LEDPin,LOW);
-    servoB.write(90);
-  }
-  
-  delay(100);
+	joyStickPositionA = analogRead(joyStickPinA) / (1023/180);
+	joyStickPositionB = analogRead(joyStickPinB) / (1023/180);
+
+	servoA.write(joyStickPositionA);
+	servoB.write(joyStickPositionB);
+
+	bool switchStateA=digitalRead(switchPinA);
+	bool switchStateB=digitalRead(switchPinB);
+	
+	if(switchStateA==1 && switchStateB==1){
+		servoC.write(90);
+	}
+	else if(switchStateA==0 && switchStateB==1){
+		servoC.write(0);
+	}
+	else if(switchStateA==1 && switchStateB==0){
+		servoC.write(180);
+	}
+	delay(100);
 }
