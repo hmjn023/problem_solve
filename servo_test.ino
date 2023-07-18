@@ -10,8 +10,8 @@ const int joyStickPinB = A2;
 const int switchPinA = 2;
 const int switchPinB = 3;
 
-const int servoPinA = 11;
-const int servoPinB = 12;
+const int servoPinA = 9;
+const int servoPinB = 11;
 const int servoPinC= 13;
 
 int joyStickPositionA;
