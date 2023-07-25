@@ -7,11 +7,12 @@
 ```mermaid
 flowchart LR
 
-A[Switch A] -- LOW --> B[LED ON]
-A -- HIGH --> C[LED OFF]
+A[JoyStick A] --xdegree--> B[Servo A x degree]
+C[JoyStick B] --ydegree--> D[Servo B y degree]
 
-D[Switch B] -- LOW --> E[Servo B 180 degree]
-D -- HIGH --> F[Servo B 90 degree]
+E[Switch A] --LOW--> F[Servo C 0 degree] 
+E --HIGH--> G[Servo C 90 degree]
 
-G[Joystick] -- x degree --> H[Servo A x degree]
+H[Switch B] --LOW--> I[Servo C 180 degree]
+H --HIGH--> G
 ```
